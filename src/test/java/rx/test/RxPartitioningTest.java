@@ -10,7 +10,7 @@ import static java.lang.Thread.currentThread;
 import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GroupByWithParallel {
+public class RxPartitioningTest {
 
     private static final int MAX_NUMBER_OF_THREADS = 4;
 
