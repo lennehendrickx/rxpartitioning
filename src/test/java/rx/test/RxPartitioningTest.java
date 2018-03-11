@@ -14,6 +14,8 @@ public class RxPartitioningTest {
 
     private static final int MAX_NUMBER_OF_THREADS = 4;
 
+    private ConcurrentHashMap<String, Integer> threadProcessingCount = new ConcurrentHashMap<>();
+
     /**
      * Test fails.
      * Expected behavior: processing is evenly distributed accross 4 threads.
@@ -21,8 +23,6 @@ public class RxPartitioningTest {
      */
     @Test
     public void groupByWithParallel() {
-
-        ConcurrentHashMap<String, Integer> threadProcessingCount = new ConcurrentHashMap<>();
 
         // GIVEN
         Flowable<Integer> flowableWithGroupByAndParallel = Flowable.just(1, 2, 3, 4)
@@ -54,8 +54,6 @@ public class RxPartitioningTest {
     @Test
     public void flatMapWithSubscribeOn() {
 
-        ConcurrentHashMap<String, Integer> threadProcessingCount = new ConcurrentHashMap<>();
-
         // GIVEN
         Flowable<Integer> flowableWithFlapMapAndSubscribeOn = Flowable.just(1, 2, 3, 4)
                 .repeat(250)
@@ -80,8 +78,6 @@ public class RxPartitioningTest {
      */
     @Test
     public void flatMapWithObserveOn() {
-
-        ConcurrentHashMap<String, Integer> threadProcessingCount = new ConcurrentHashMap<>();
 
         // GIVEN
         Flowable<Integer> flowableWithFlapMapAndObserveOn = Flowable.just(1, 2, 3, 4)
