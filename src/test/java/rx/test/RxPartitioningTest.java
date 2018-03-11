@@ -30,10 +30,13 @@ public class RxPartitioningTest {
                 .groupBy(number -> number % MAX_NUMBER_OF_THREADS)
                 .parallel()
                 .runOn(Schedulers.io())
-                .flatMap(group -> group.doOnNext(number -> {
-                    printThreadAndNumber(number);
-                    increaseThreadProcessingCount(threadProcessingCount);
-                }))
+                .flatMap(group -> {
+                    System.out.println("Mapping on thead " + currentThread().getName());
+                    return group.doOnNext(number -> {
+                        printThreadAndNumber(number);
+                        increaseThreadProcessingCount(threadProcessingCount);
+                    });
+                })
                 .sequential();
 
         // WHEN
@@ -42,6 +45,7 @@ public class RxPartitioningTest {
                 .awaitTerminalEvent();
 
         // THEN
+        System.out.println(threadProcessingCount);
         assertThat(threadProcessingCount.values()).containsExactly(250, 250, 250, 250);
 
     }
@@ -102,8 +106,8 @@ public class RxPartitioningTest {
         System.out.println(Thread.currentThread().getName() + " " + number);
     }
 
-    private static void increaseThreadProcessingCount(ConcurrentHashMap<String, Integer> threadCallCount) {
-        threadCallCount
+    private static void increaseThreadProcessingCount(ConcurrentHashMap<String, Integer> threadProcessingCount) {
+        threadProcessingCount
                 .compute(currentThread().getName(),
                         (thread, count) -> ofNullable(count).map(previousCount -> ++previousCount).orElse(1));
     }
